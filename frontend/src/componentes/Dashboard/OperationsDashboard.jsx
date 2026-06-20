@@ -189,7 +189,7 @@ export const OperationsDashboard = () => {
             <FiTruck /> Despachos
           </button>
         </nav>
-        <div className="sidebar-status"><span /> ECS local activo</div>
+        <div className="sidebar-status"><span /> ECS AWS activo</div>
       </aside>
 
       <main className="main-content">
