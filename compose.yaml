@@ -1,0 +1,82 @@
+services:
+  mysql-ventas:
+    image: mysql:8.0
+    environment:
+      MYSQL_DATABASE: ventas_db
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-local_root_password}
+      MYSQL_USER: ${MYSQL_USER:-innovatech}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-local_app_password}
+    ports:
+      - "3308:3306"
+    volumes:
+      - ventas_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -u$${MYSQL_USER} -p$${MYSQL_PASSWORD}"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 20s
+
+  mysql-despachos:
+    image: mysql:8.0
+    environment:
+      MYSQL_DATABASE: despachos_db
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-local_root_password}
+      MYSQL_USER: ${MYSQL_USER:-innovatech}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-local_app_password}
+    ports:
+      - "3307:3306"
+    volumes:
+      - despachos_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -u$${MYSQL_USER} -p$${MYSQL_PASSWORD}"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 20s
+
+  backend-ventas:
+    build:
+      context: ./backend-ventas
+    environment:
+      DB_ENDPOINT: mysql-ventas
+      DB_PORT: "3306"
+      DB_NAME: ventas_db
+      DB_USERNAME: ${MYSQL_USER:-innovatech}
+      DB_PASSWORD: ${MYSQL_PASSWORD:-local_app_password}
+    ports:
+      - "8082:8080"
+    depends_on:
+      mysql-ventas:
+        condition: service_healthy
+    restart: unless-stopped
+
+  backend-despachos:
+    build:
+      context: ./backend-despachos
+    environment:
+      DB_ENDPOINT: mysql-despachos
+      DB_PORT: "3306"
+      DB_NAME: despachos_db
+      DB_USERNAME: ${MYSQL_USER:-innovatech}
+      DB_PASSWORD: ${MYSQL_PASSWORD:-local_app_password}
+    ports:
+      - "8081:8081"
+    depends_on:
+      mysql-despachos:
+        condition: service_healthy
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+    ports:
+      - "8080:80"
+    depends_on:
+      - backend-ventas
+      - backend-despachos
+    restart: unless-stopped
+
+volumes:
+  ventas_data:
+  despachos_data:
