@@ -3,6 +3,14 @@
 Aplicacion de gestion de ventas y despachos preparada para contenedores y
 despliegue automatizado en Amazon ECS.
 
+## Aplicacion en AWS
+
+La version desplegada esta disponible en:
+
+```text
+http://innovatech-ev3-alb-817468448.us-east-1.elb.amazonaws.com
+```
+
 ## Arquitectura
 
 - `frontend`: React y Vite, servido por Nginx.
@@ -70,10 +78,16 @@ del despliegue inicial.
 - Persistencia de datos despues de reiniciar los contenedores.
 - Auditoria de dependencias de produccion del frontend sin vulnerabilidades.
 - Publicacion y escaneo de las imagenes en Amazon ECR.
+- Despliegue de tres servicios independientes en ECS Fargate.
+- Enrutamiento y health checks mediante Application Load Balancer.
+- Persistencia en RDS MySQL privado y credenciales en Secrets Manager.
+- Auto scaling por CPU entre 1 y 3 tareas.
+- Logs y metricas en CloudWatch con Container Insights.
+- Autorecuperacion comprobada al reemplazar una tarea en 78.9 segundos.
 
-## Proximas etapas EV3
+## Automatizacion
 
-1. Crear la infraestructura y los servicios en Amazon ECS.
-2. Configurar balanceo de carga, health checks y auto scaling.
-3. Incorporar workflows de GitHub Actions para build, push y deploy.
-4. Configurar secretos y observabilidad con servicios de AWS.
+Los tres workflows de GitHub Actions construyen la imagen correspondiente,
+la publican en ECR y actualizan su servicio ECS. Consultar
+`infrastructure/README.md` para conocer la arquitectura, seguridad, metricas y
+renovacion de credenciales temporales de AWS Academy.

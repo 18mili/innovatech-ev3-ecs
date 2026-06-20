@@ -1,0 +1,58 @@
+{
+  "family": "innovatech-ev3-despachos",
+  "networkMode": "awsvpc",
+  "requiresCompatibilities": ["FARGATE"],
+  "cpu": "512",
+  "memory": "1024",
+  "executionRoleArn": "arn:aws:iam::630562482864:role/LabRole",
+  "taskRoleArn": "arn:aws:iam::630562482864:role/LabRole",
+  "runtimePlatform": {
+    "cpuArchitecture": "X86_64",
+    "operatingSystemFamily": "LINUX"
+  },
+  "containerDefinitions": [
+    {
+      "name": "backend-despachos",
+      "image": "630562482864.dkr.ecr.us-east-1.amazonaws.com/innovatech-ev3-back-despachos:v1",
+      "essential": true,
+      "portMappings": [
+        {
+          "containerPort": 8081,
+          "protocol": "tcp"
+        }
+      ],
+      "environment": [
+        {
+          "name": "DB_ENDPOINT",
+          "value": "innovatech-ev3-mysql.c10626i88amd.us-east-1.rds.amazonaws.com"
+        },
+        {
+          "name": "DB_PORT",
+          "value": "3306"
+        },
+        {
+          "name": "DB_NAME",
+          "value": "despachos_db"
+        },
+        {
+          "name": "DB_USERNAME",
+          "value": "admininnovatech"
+        }
+      ],
+      "secrets": [
+        {
+          "name": "DB_PASSWORD",
+          "valueFrom": "arn:aws:secretsmanager:us-east-1:630562482864:secret:innovatech/ev3/database-tHUqJH:password::"
+        }
+      ],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/ecs/innovatech-ev3/despachos",
+          "awslogs-region": "us-east-1",
+          "awslogs-stream-prefix": "ecs"
+        }
+      }
+    }
+  ]
+}
