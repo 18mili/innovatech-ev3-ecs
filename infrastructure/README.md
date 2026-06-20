@@ -64,6 +64,21 @@ Learner Lab se deben actualizar estos secretos del repositorio:
 - `AWS_SECRET_ACCESS_KEY`
 - `AWS_SESSION_TOKEN`
 
+### Primera ejecucion validada
+
+Los tres pipelines se ejecutaron correctamente el 20 de junio de 2026:
+
+| Pipeline | Resultado | Duracion | Evidencia |
+| --- | --- | ---: | --- |
+| Frontend | Exitoso | 4 min 12 s | [GitHub Actions](https://github.com/18mili/innovatech-ev3-ecs/actions/runs/27870621266) |
+| Ventas | Exitoso | 5 min | [GitHub Actions](https://github.com/18mili/innovatech-ev3-ecs/actions/runs/27870621257) |
+| Despachos | Exitoso | 4 min 12 s | [GitHub Actions](https://github.com/18mili/innovatech-ev3-ecs/actions/runs/27870621261) |
+
+Cada pipeline publico una imagen con la etiqueta del SHA `ab7636b`, registro
+la revision 2 de su task definition y dejo su servicio ECS estable. Despues del
+despliegue se verificaron HTTP 200 y la persistencia de los registros de venta
+y despacho en RDS.
+
 ## Resultados medidos
 
 Mediciones iniciales realizadas el 20 de junio de 2026:
