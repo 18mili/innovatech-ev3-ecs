@@ -195,7 +195,7 @@ export const OperationsDashboard = () => {
       <main className="main-content">
         <header className="page-header">
           <div>
-            <p className="eyebrow">Centro de operaciones AWS</p>
+            <p className="eyebrow">Centro de operaciones DevOps</p>
             <h1>Ventas y despachos</h1>
             <p>Gestion centralizada de ordenes y entregas.</p>
           </div>
